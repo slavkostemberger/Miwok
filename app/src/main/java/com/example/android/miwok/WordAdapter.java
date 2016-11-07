@@ -3,6 +3,7 @@ package com.example.android.miwok;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +13,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by slavko on 28-Oct-2016 09:10:03PM.
- */
+import static android.media.CamcorderProfile.get;
 
 public class WordAdapter extends ArrayAdapter<Word>
 {
-    private int mColorResourceId;
-    private int mSoundReourceId;
-//    private MediaPlayer mMediaPlayer;
+    /**
+     * Created by slavko on 28-Oct-2016 09:10:03PM.
+     */
+
+
+    private int mColorResourceId;       // This contains the colour of the word translation container
 
     /**
      * @param context         - View context
@@ -28,30 +30,24 @@ public class WordAdapter extends ArrayAdapter<Word>
      * @param objects
      * @param colorResourceId
      */
+/* This version is NOT used in the app as the resource is always set to 0
     public WordAdapter(Context context, int resource, List<Word> objects, int colorResourceId)
     {
         super(context, resource, objects);
         mColorResourceId = colorResourceId;
     }
-
+*/
     /**
      * @param context         - is the current context (activity)
      * @param objects         - is the list of word translations and appropriate image (if required)
      * @param colorResourceId - The colour of the word translation area
      */
+
     public WordAdapter(Context context, List<Word> objects, int colorResourceId)
     {
         super(context, 0, objects);
         mColorResourceId = colorResourceId;
     }
-
-    public WordAdapter(Context context, List<Word> objects, int colorResourceId, int soundResourceId)
-    {
-        super(context, 0, objects);
-        mColorResourceId = colorResourceId;
-        mSoundReourceId = soundResourceId;
-    }
-
     /**
      * @param position
      * @param convertView
@@ -74,17 +70,15 @@ public class WordAdapter extends ArrayAdapter<Word>
         Word currentWord = getItem(position);
         // Find the TextView in the list_item.xml layout for each view to be displayed
 
-        ImageView iconView = (ImageView) listItemView.findViewById(R.id.image_view);
+        ImageView iconView        = (ImageView) listItemView.findViewById(R.id.image_view);
         View translationContainer = listItemView.findViewById(R.id.text_container);
-        View textContainer = listItemView.findViewById(R.id.text_container);
-        TextView miworkTextView = (TextView) listItemView.findViewById(R.id.miword_text_view);
-        TextView defaultTextView = (TextView) listItemView.findViewById(R.id.default_text_view);
+        TextView miworkTextView   = (TextView) listItemView.findViewById(R.id.miword_text_view);
+        TextView defaultTextView  = (TextView) listItemView.findViewById(R.id.default_text_view);
 
         //
         // Set the views to the image/words
         int color = ContextCompat.getColor(getContext(), mColorResourceId);     // Get the colour for the colour resource provided
-//        textContainer.setBackgroundColor(color);                                // Set the background of the word container to the specified colour
-        translationContainer.setBackgroundColor(color);
+        translationContainer.setBackgroundColor(color);                         // Set the background color of the translation word container
         // Set up the image for the
         if (currentWord.hasImage())
         {
@@ -112,4 +106,6 @@ public class WordAdapter extends ArrayAdapter<Word>
         //        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 */
+
+
 }

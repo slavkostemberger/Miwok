@@ -24,6 +24,9 @@ public class FamilyActivity extends MiwokBase
 
     }
 
+    /**
+     * Create the translation words for this class
+     */
     protected void addWords()
     {
         mWords.add(new Word("father"         , "әpә"     , R.drawable.family_father         , R.raw.family_father));

@@ -5,44 +5,63 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+
+public class Word
+{
 /**
  * Created by slavko on 28-Oct-2016 08:35:38PM.
  */
 
-public class Word
-{
-    private int    mImageResourceId;
-    private String mMiwokTranslation;
-    private String mDefaulttranslation;
-    private int    mSoundResourceId;
-    private MediaPlayer mMediaPlayer;
-
-    private static final int NO_IMAGE_PROVIDED = -1;
 
     /**
-     *
-     * @param defaulttranslation - the default word
-     * @param miwokTranslation - the Miwok word
-     * @param soundResourceId - image resource id
+     * private variable used by this class
      */
-    public Word(String defaulttranslation, String miwokTranslation, int soundResourceId)
+    private int    mImageResourceId = NO_IMAGE_PROVIDED;    // Image associated
+    private String mMiwokTranslation;                       // Miwok word phrase
+    private String mDefaulttranslation;                     // The default (English) word phrase
+    private int    mSoundResourceId;                        // Sound file id
+
+    private static final int NO_IMAGE_PROVIDED = -1;        // Constant used to check if an image exists for this word phrase
+
+    /**
+     * Create a Word with no image associated with it
+     * @param defaultTranslation - the default word
+     * @param miwokTranslation   - the Miwok word
+     * @param soundResourceId    - the sound file resource id for this word phrase
+     */
+    public Word(String defaultTranslation,
+                String miwokTranslation,
+                int soundResourceId
+               )
     {
         mMiwokTranslation   = miwokTranslation;
-        mDefaulttranslation = defaulttranslation;
-        mImageResourceId    = NO_IMAGE_PROVIDED; // Image resourses are NEVER -1
+        mDefaulttranslation = defaultTranslation;
+        mImageResourceId    = NO_IMAGE_PROVIDED; // Image resources are NEVER -1
         mSoundResourceId    = soundResourceId;
     }
-    public Word(String defaulttranslation, String miwokTranslation, int imageResourceId, int soundResourceId)
+
+    /**
+     *      * Create a Word with an image associated with it
+     * @param defaultTranslation - the default word
+     * @param miwokTranslation   - the Miwok word
+     * @param imageResourceId    - the image id associated with this word phrase
+     * @param soundResourceId    - the sound file resource id for this word phrase
+     */
+    public Word(String defaultTranslation,
+                String miwokTranslation,
+                int imageResourceId,
+                int soundResourceId
+               )
     {
         mMiwokTranslation   = miwokTranslation;
-        mDefaulttranslation = defaulttranslation;
+        mDefaulttranslation = defaultTranslation;
         mImageResourceId    = imageResourceId;
         mSoundResourceId    = soundResourceId;
     }
 
     /**
      *
-     * @return the imager resorce id
+     * @return the image resource id
      */
     public int getImageResourceId()
     {
@@ -67,36 +86,27 @@ public class Word
         return mMiwokTranslation;
     }
 
-    public int getSoundResource() {return mSoundResourceId; }
-
-    public boolean hasImage()
-    {
-        return mImageResourceId != NO_IMAGE_PROVIDED;
-    }
-
+    /**
+     *
+     * @return the sound for the Miwok word phrase
+     */
+    public int getSoundResource()       {return mSoundResourceId; }
 
     /**
-     * Debug helper to sump words in an array
-     * @param activityName - name of the acctivity that called this procedure
-     * @param words - array list of words to dump
+     *
+     * @return true if this word phrase has an image and
+     *         false if not image exists for the word phrase
      */
-    public static void dumpWords(String activityName, ArrayList<Word> words)
-    {
-        for(int i = 0; i < words.size(); ++i)
-        {
-            Log.v(activityName, "Word at IndexX " + i + ": " + words.get(i).getDefaultTranslation());
-        }
-    }
+    public boolean hasImage()           { return mImageResourceId != NO_IMAGE_PROVIDED; }
 
     @Override
     public String toString()
     {
         return "Word{" +
-                "mImageResourceId="       + mImageResourceId +
-                ", mMiwokTranslation='"   + mMiwokTranslation + '\'' +
+                "mImageResourceId="       + mImageResourceId    + '\'' +
+                ", mMiwokTranslation='"   + mMiwokTranslation   + '\'' +
                 ", mDefaulttranslation='" + mDefaulttranslation + '\'' +
-                ", mSoundResourceId="     + mSoundResourceId +
-                ", mMediaPlayer="         + mMediaPlayer +
+                ", mSoundResourceId="     + mSoundResourceId    +
                 '}';
     }
 }

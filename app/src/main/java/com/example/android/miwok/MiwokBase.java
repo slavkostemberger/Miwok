@@ -25,13 +25,33 @@ public class MiwokBase extends AppCompatActivity
      * Define class variables
      */
 
-        // The word list has to be final because it is used in an anonymous class
+    /**
+     * Define the word array to hold the translation words and image
+     * Note to self: This has to be final because it is used in an anonymous class
+     */
     final ArrayList<Word> mWords = new ArrayList<Word>();
+
+    /**
+     * This contains the background color of the translation word area
+     * defaulted to red. It should be set in the onCreate method of the subclass
+     * via the setActivityColor method
+     */
     private int mCategoryColor = R.drawable.color_red;  // The background color for the activity set by a subclass
 
+    /**
+     * Media Player and Audio Manager object containers
+     */
     private MediaPlayer mMediaPlayer;   // Media player player - So we can manage it properly
     private AudioManager mAudioManager; // Audio Focus handling
 
+    /**
+     * ----------------------------------------------------------------------------
+     * Create the on audio focus change listener
+     * Note to self: It's not clear to me yet as to ahat focus change states should
+     *      be checked fo here. I've put more than what the tutorial lists as an
+     *      example for me
+     * ----------------------------------------------------------------------------
+     */
     final AudioManager.OnAudioFocusChangeListener mAudioFocusChangeListener =
             new AudioManager.OnAudioFocusChangeListener()
             {
@@ -40,19 +60,25 @@ public class MiwokBase extends AppCompatActivity
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = " + focusChange);
                     if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
                     {
+trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS_TRANSIENT");
                         /**
                          * Note to self
                          * It appears that AUDIOFOCUS_LOSS_TRANSIENT at the end of the sound
-                         * sets the sound object to null. If I call the pause() method
-                         * I end up with a null exception!!!
+                         * sets the sound object to null when MediaPlayer is requested
+                         * with AUDIOFOCUS_GAIN_TRANSIENT.
+                         * If I call the pause() method I end up with a null exception!!!
+                         *
+                         * Base on above observation, I need to release the media player
+                         * This behaviour needs to be verified
                          */
-                        trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS_TRANSIENT");
+                        releaseMediaPlayer();
+
                         // Pause playback and reset to start of audio file
-//                        mMediaPlayer.pause();
+                        // mMediaPlayer.pause();
                         // For music, you would continue from where you seft off
                         // But in this case, we want to resetart so we need to point
-                        // to the begining of the file
-                        mMediaPlayer.seekTo(0);
+                        // to the beginning of the file
+                        //mMediaPlayer.seekTo(0);
                     } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
@@ -62,7 +88,15 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_L
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN");
+                        /**
+                         * It appears that when I get this callback. I've lost the
+                         * media player. The following exception is raised
+                         * java.lang.NullPointerException: Attempt to invoke virtual method 'void android.media.MediaPlayer.start()' on a null object reference
+                         *
+                         * The mMediaPlayer variable is somtimes null
+                         */
                         // Resume playback
+trace("AUDIOFOCUS_GAIN mMediaPlayer = " + mMediaPlayer);
                         mMediaPlayer.start();
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
                     {
@@ -89,9 +123,29 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_G
                     }
                 }
             };
+
+    /**
+     * ----------------------------------------------------------------------------
+     * Create the on complete media listener
+     * Question: Should the audio focus change listener be abandoned as well?
+     * ----------------------------------------------------------------------------
+     */
+    MediaPlayer.OnCompletionListener mMediaCompleted = new MediaPlayer.OnCompletionListener()
+    {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer)
+        {
+            trace("MiwokBase.OnCreate.onCompletion");
+            // trace("Media player complete - releasing ...");
+            mediaPlayer.release();
+            mMediaPlayer = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+traceE("==> onCreate =================================================================");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
 
@@ -104,14 +158,17 @@ trace("MiwokBase.OnCreate Getting AudioManager");
         addWords();                 // Set up the required word translations (redefined at the subclass level)
 
         // Dump word list to log
-/*
+        /**
+         * The following is here as a reminder of a way of dumping the word list
         for(int i = 0; i < mWords.size(); ++i)
         {
             trace("Word at index " + i + ": " + mWords.get(i));
         }
-*/
+        */
+
         WordAdapter adapter = new WordAdapter(this, mWords, mCategoryColor);
         ListView listView = (ListView) findViewById(R.id.word_list);
+        //listView.setAdapter(new WordAdapter(this, mWords, mCategoryColor));
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -133,10 +190,11 @@ trace("MiwokBase.OnCreate.onItemClick ");
 trace("MiwokBase.OnCreate.onItemClick requestAudioFocus result = " + result);
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
                 {
-trace("MiwokBase.OnCreate.onItemClick requestAudioFocus result wa AUDIO_REQUEST_GRANTED ");
+traceE("MiwokBase.OnCreate.onItemClick requestAudioFocus result wa AUDIO_REQUEST_GRANTED ");
                     // We have audio focus - Start playback.
                     mMediaPlayer = MediaPlayer.create(MiwokBase.this,
                             mWords.get(position).getSoundResource());
+traceE("OnClick mMediaPlayer = " + mMediaPlayer);
                     mMediaPlayer.start();
                     mMediaPlayer.setOnCompletionListener(mMediaCompleted);
                 }
@@ -177,6 +235,11 @@ trace("MiwokBase.OnCreate.onItemClick requestAudioFocus result wa AUDIO_REQUEST_
             // Code to display a message on the screen for a short time, should we decide that it would be useful
         // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+    protected void traceE(String msg)
+    {
+        // This generated red lines in the log file
+        Log.e(this.getClass().getName(), msg);
+    }
 
     /**
      * Clean up the media player by releasing its resources.
@@ -200,30 +263,28 @@ trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
             mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
 
         }
-else {    trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");}
+else trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
     }
-
-    /**
-     * Create variable to hold the on complete media listener
-     */
-    MediaPlayer.OnCompletionListener mMediaCompleted = new MediaPlayer.OnCompletionListener()
-    {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer)
-        {
-trace("MiwokBase.OnCreate.onCompletion");
-            // trace("Media player complete - releaseing ...");
-            mediaPlayer.release();
-            mMediaPlayer = null;
-        }
-    };
 
     @Override
     protected void onStop()
     {
-trace("MiwokBase.onStop ============================");
+traceE("<== MiwokBase.onStop =========================================================");
         super.onStop();
         releaseMediaPlayer();
+    }
+
+
+    /**
+     * Debug helper to dump words in an array
+     */
+    public void dumpWords()
+    {
+        for(int i = 0; i < mWords.size(); ++i)
+        {
+            //trace("Word at IndexX " + i + ": " + mWords.get(i).getDefaultTranslation());
+            trace("Word at IndexX " + i + ": " + mWords.get(i).toString());
+        }
     }
 
 }

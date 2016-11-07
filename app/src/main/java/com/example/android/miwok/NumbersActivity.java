@@ -2,12 +2,13 @@ package com.example.android.miwok;
 
 import android.os.Bundle;
 
-/**
- * Created by slavko on 04-Nov-2016 11:43:32AM.
- */
-
 public class NumbersActivity extends MiwokBase
 {
+    /**
+     * Created by slavko on 04-Nov-2016 11:43:32AM.
+     */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -16,6 +17,9 @@ public class NumbersActivity extends MiwokBase
 
     }
 
+    /**
+     * Create the translation words for this class
+     */
     protected void addWords()
     {
         trace("NumbersActivity.addWords");

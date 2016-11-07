@@ -23,6 +23,10 @@ public class PhrasesActivity extends MiwokBase
 
     }
 
+    /**
+     * Create the translation words for this class
+     * Note that this is the only activity in this app that does not need a icon/image
+     */
     protected void addWords()
     {
         mWords.add(new Word("Where are you going?", "minto wuksus"   , R.raw.phrase_where_are_you_going));

@@ -26,7 +26,13 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity
 {
 
-    private void defineOnClickListener(int id, final Class c)
+    /**
+     * Helper that creates the OnClick listener to start eaach of the activity on the main screen
+     *
+     * @param id - View id
+     * @param c  - Activity class to execute onClick
+     */
+    private void createOnClickListener(int id, final Class c)
     {
         // Find the View that shows the numbers category
         TextView myView = (TextView) findViewById(id);
@@ -45,6 +51,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Override the onCreat method to define this app's activities
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -53,95 +63,12 @@ public class MainActivity extends AppCompatActivity
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
-        //Toast.makeText(this, "Should play sound", Toast.LENGTH_LONG).show();
 
         // OnClickListener For:
-        defineOnClickListener(R.id.numbers, NumbersActivity.class);     //      Numbers
-        defineOnClickListener(R.id.family,  FamilyActivity.class);      //      Family Members
-        defineOnClickListener(R.id.colors,  ColorsActivity.class);      //      Colors
-        defineOnClickListener(R.id.phrases, PhrasesActivity.class);     //      Phrases
-/*
-    The following is a bit redundant but would have to be used if there was work to do that was
-    different for each activity.
-
-    In that case, it ma make sense to write a method for activity to start just to keep this code clean
-
-        // -----------------------------------------------------------------------------------------
-        // OnClickListener for numbers
-        // -----------------------------------------------------------------------------------------
-
-        // Find the View that shows the numbers category
-        TextView numbers = (TextView) findViewById(R.id.numbers);
-
-        // Set a click listener on that View
-        numbers.setOnClickListener(new View.OnClickListener()
-        {
-            // The code in this method will be executed when the numbers View is clicked on.
-            @Override
-            public void onClick(View view)
-            {
-                Intent numbersIntent = new Intent(MainActivity.this, NumbersActivity.class);
-                startActivity(numbersIntent);
-            }
-        });
-        // -----------------------------------------------------------------------------------------
-        // OnClickListener for Family Members
-        // -----------------------------------------------------------------------------------------
-
-        // Find the View that shows the numbers category
-        TextView family = (TextView) findViewById(R.id.family);
-
-        // Set a click listener on that View
-        family.setOnClickListener(new View.OnClickListener()
-        {
-            // The code in this method will be executed when the numbers View is clicked on.
-            @Override
-            public void onClick(View view)
-            {
-                Intent familyIntent = new Intent(MainActivity.this, FamilyActivity.class);
-                startActivity(familyIntent);
-            }
-        });
-
-        // -----------------------------------------------------------------------------------------
-        // OnClickListener for Colors
-        // -----------------------------------------------------------------------------------------
-
-        // Find the View that shows the numbers category
-        TextView colors = (TextView) findViewById(R.id.colors);
-
-        // Set a click listener on that View
-        colors.setOnClickListener(new View.OnClickListener()
-        {
-            // The code in this method will be executed when the numbers View is clicked on.
-            @Override
-            public void onClick(View view)
-            {
-                Intent colorsIntent = new Intent(MainActivity.this, ColorsActivity.class);
-                startActivity(colorsIntent);
-            }
-        });
-
-
-        // -----------------------------------------------------------------------------------------
-        // OnClickListener for Phrases
-        // -----------------------------------------------------------------------------------------
-
-        // Find the View that shows the numbers category
-        TextView phrases = (TextView) findViewById(R.id.phrases);
-
-        // Set a click listener on that View
-        phrases.setOnClickListener(new View.OnClickListener()
-        {
-            // The code in this method will be executed when the numbers View is clicked on.
-            @Override
-            public void onClick(View view)
-            {
-                Intent phrasesIntent = new Intent(MainActivity.this, PhrasesActivity.class);
-                startActivity(phrasesIntent);
-            }
-        });
-*/
+        createOnClickListener(R.id.numbers, NumbersActivity.class);     //      Numbers
+        createOnClickListener(R.id.family,  FamilyActivity.class);      //      Family Members
+        createOnClickListener(R.id.colors,  ColorsActivity.class);      //      Colors
+        createOnClickListener(R.id.phrases, PhrasesActivity.class);     //      Phrases
     }
 
 }
