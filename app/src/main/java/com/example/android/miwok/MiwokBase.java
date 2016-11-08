@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
+import static android.transition.Fade.IN;
 
 public class MiwokBase extends AppCompatActivity
 {
@@ -20,7 +21,7 @@ public class MiwokBase extends AppCompatActivity
      * All sub-classes must override the onCreate and addWords methods
      */
 
-
+    int isRunning = -1;
     /**
      * Define class variables
      */
@@ -29,7 +30,7 @@ public class MiwokBase extends AppCompatActivity
      * Define the word array to hold the translation words and image
      * Note to self: This has to be final because it is used in an anonymous class
      */
-    final ArrayList<Word> mWords = new ArrayList<Word>();
+    final ArrayList<Word> mWords = new ArrayList<>();
 
     /**
      * This contains the background color of the translation word area
@@ -96,8 +97,14 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_G
                          * The mMediaPlayer variable is somtimes null
                          */
                         // Resume playback
-trace("AUDIOFOCUS_GAIN mMediaPlayer = " + mMediaPlayer);
-                        mMediaPlayer.start();
+trace("AUDIOFOCUS_GAIN   mMediaPlayer = " + mMediaPlayer);
+trace("AUDIOFOCUS_GAIN  mAudioManager = " + mAudioManager);
+trace("AUDIOFOCUS_GAIN mCategoryColor = " + mCategoryColor);
+//                        if(mMediaPlayer != null)
+                        {
+                            mMediaPlayer.seekTo(0);
+                            mMediaPlayer.start();
+                        }
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN_TRANSIENT");
@@ -146,6 +153,7 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_G
     protected void onCreate(Bundle savedInstanceState)
     {
 traceE("==> onCreate =================================================================");
+        isRunning = 1;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
 
@@ -153,6 +161,9 @@ traceE("==> onCreate ===========================================================
 trace("MiwokBase.OnCreate Getting AudioManager");
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+trace("MiwokBase.OnCreate   mMediaPlayer = " + mMediaPlayer);
+trace("MiwokBase.OnCreate  mAudioManager = " + mAudioManager);
+trace("MiwokBase.OnCreate mCategoryColor = " + mCategoryColor);
 
         //mWords = new ArrayList<Word>();
         addWords();                 // Set up the required word translations (redefined at the subclass level)
@@ -231,14 +242,14 @@ traceE("OnClick mMediaPlayer = " + mMediaPlayer);
     protected void trace(String msg)
     {
             // The getClass().getName() returns the class name (sub-class in this case)
-        Log.v(this.getClass().getName(), msg);
+        Log.v(this.getClass().getName(), "(" + isRunning + ")" + msg);
             // Code to display a message on the screen for a short time, should we decide that it would be useful
         // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
     protected void traceE(String msg)
     {
         // This generated red lines in the log file
-        Log.e(this.getClass().getName(), msg);
+        Log.e(this.getClass().getName(), "(" + isRunning + ")" + msg);
     }
 
     /**
@@ -249,6 +260,10 @@ traceE("OnClick mMediaPlayer = " + mMediaPlayer);
         // If the media player is not null, then it may be currently playing a sound.
         if (mMediaPlayer != null)
         {
+
+            // Abandon the audio focus when playback is completed (or interrupted)
+            mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
+
             // Regardless of the current state of the media player, release its resources
             // because we no longer need it.
 trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
@@ -259,9 +274,6 @@ trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
             // is not configured to play an audio file at the moment.
             mMediaPlayer = null;
 
-            // Abandon the audio focus when playback is completed (or interrupted)
-            mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
-
         }
 else trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
     }
@@ -270,8 +282,9 @@ else trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
     protected void onStop()
     {
 traceE("<== MiwokBase.onStop =========================================================");
-        super.onStop();
         releaseMediaPlayer();
+        isRunning = 0;
+        super.onStop();
     }
 
 
