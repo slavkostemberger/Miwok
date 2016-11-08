@@ -84,8 +84,14 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_L
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                         // In this case, we wnat ot handel it the same was as for\
-                        mMediaPlayer.pause();
-                        mMediaPlayer.seekTo(0);
+                        if(mMediaPlayer != null)
+                        {
+                            mMediaPlayer.pause();
+                            mMediaPlayer.seekTo(0);
+                        } else
+                        {
+                            traceE("Medial Player Not Configured (mMediaPlayer is null)");
+                        }
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN");
@@ -100,22 +106,39 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_G
 trace("AUDIOFOCUS_GAIN   mMediaPlayer = " + mMediaPlayer);
 trace("AUDIOFOCUS_GAIN  mAudioManager = " + mAudioManager);
 trace("AUDIOFOCUS_GAIN mCategoryColor = " + mCategoryColor);
-//                        if(mMediaPlayer != null)
+                        if(mMediaPlayer != null)
                         {
                             mMediaPlayer.seekTo(0);
                             mMediaPlayer.start();
+                        } else
+                        {
+                            traceE("Medial Player Not Configured (mMediaPlayer is null)");
                         }
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN_TRANSIENT");
                         // Resume playback
-                        mMediaPlayer.start();
+                        if(mMediaPlayer != null)
+                        {
+                            mMediaPlayer.start();
+                        } else
+                        {
+                            traceE("Medial Player Not Configured (mMediaPlayer is null)");
+                        }
+
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
                     {
 trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK");
                         // Pause playback - we don't want to make it quieter only
-                        mMediaPlayer.pause();
-                        mMediaPlayer.seekTo(0);
+                        if(mMediaPlayer != null)
+                        {
+                            mMediaPlayer.pause();
+                            mMediaPlayer.seekTo(0);
+                        } else
+                        {
+                            trace("Medial Player Not Configured (mMediaPlayer is null)");
+                        }
+
                     } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
                     {
                         /**
@@ -144,8 +167,7 @@ trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_G
         {
             trace("MiwokBase.OnCreate.onCompletion");
             // trace("Media player complete - releasing ...");
-            mediaPlayer.release();
-            mMediaPlayer = null;
+            releaseMediaPlayer();
         }
     };
 

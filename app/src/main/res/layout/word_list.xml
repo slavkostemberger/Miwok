@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    The android:drawSelectorOnTop="true" causes the ripple effect on click release
+    to show.
+    The alternative option is to create an other view as was done in the main screen
+  -->
 <ListView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,5 +12,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.miwok.NumbersActivity"
+    android:drawSelectorOnTop="true"
     >
 </ListView>
