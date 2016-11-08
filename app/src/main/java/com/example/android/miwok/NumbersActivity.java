@@ -8,7 +8,10 @@ public class NumbersActivity extends MiwokBase
      * Created by slavko on 04-Nov-2016 11:43:32AM.
      */
 
-
+    /**
+     * Perform initialization of all fragments and loaders
+     * @param savedInstanceState The bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

@@ -17,6 +17,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.android.miwok"
     >
+    <!--
+        Adding android:parentActivityName=".MainActivity" causes a left pointing arrow
+        to be placed in the App bar  that, when clicked, will tack you to the MainActivity
+      -->
 
     <application
         android:allowBackup="true"
@@ -35,21 +39,25 @@
         <activity
             android:name=".PhrasesActivity"
             android:label="@string/category_phrases"
+            android:parentActivityName=".MainActivity"
             >
         </activity>
         <activity
             android:name=".NumbersActivity"
             android:label="@string/category_numbers"
+            android:parentActivityName=".MainActivity"
             >
         </activity>
         <activity
             android:name=".FamilyActivity"
             android:label="@string/category_family"
+            android:parentActivityName=".MainActivity"
             >
         </activity>
         <activity
             android:name=".ColorsActivity"
             android:label="@string/category_colors"
+            android:parentActivityName=".MainActivity"
             >
         </activity>
         <activity android:name=".MiwokBase">

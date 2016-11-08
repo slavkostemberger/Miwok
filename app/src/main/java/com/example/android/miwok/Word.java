@@ -1,25 +1,20 @@
 package com.example.android.miwok;
 
-import android.media.MediaPlayer;
-import android.util.Log;
-
-import java.util.ArrayList;
-
-
-public class Word
-{
 /**
- * Created by slavko on 28-Oct-2016 08:35:38PM.
+ * Created by Slavko on 28-Oct-2016 08:35:38PM.
  */
+
+class Word
+{
 
 
     /**
      * private variable used by this class
      */
-    private int    mImageResourceId = NO_IMAGE_PROVIDED;    // Image associated
-    private String mMiwokTranslation;                       // Miwok word phrase
-    private String mDefaulttranslation;                     // The default (English) word phrase
-    private int    mSoundResourceId;                        // Sound file id
+    private       int    mImageResourceId = NO_IMAGE_PROVIDED;    // Image associated
+    private final String mMiwokTranslation;                       // Miwok word phrase
+    private final String mDefaulttranslation;                     // The default (English) word phrase
+    private final int    mSoundResourceId;                        // Sound file id
 
     private static final int NO_IMAGE_PROVIDED = -1;        // Constant used to check if an image exists for this word phrase
 
@@ -99,6 +94,10 @@ public class Word
      */
     public boolean hasImage()           { return mImageResourceId != NO_IMAGE_PROVIDED; }
 
+    /**
+     *
+     * @return - a string version of the Word structure
+     */
     @Override
     public String toString()
     {

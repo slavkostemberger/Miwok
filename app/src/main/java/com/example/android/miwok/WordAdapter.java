@@ -3,7 +3,6 @@ package com.example.android.miwok;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,30 +12,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static android.media.CamcorderProfile.get;
+/**
+ * Created by slavko on 28-Oct-2016 09:10:03PM.
+ */
 
-public class WordAdapter extends ArrayAdapter<Word>
+class WordAdapter extends ArrayAdapter<Word>
 {
-    /**
-     * Created by slavko on 28-Oct-2016 09:10:03PM.
-     */
 
 
-    private int mColorResourceId;       // This contains the colour of the word translation container
+    private final int mColorResourceId;       // This contains the colour of the word translation container
 
-    /**
-     * @param context         - View context
-     * @param resource
-     * @param objects
-     * @param colorResourceId
-     */
-/* This version is NOT used in the app as the resource is always set to 0
-    public WordAdapter(Context context, int resource, List<Word> objects, int colorResourceId)
-    {
-        super(context, resource, objects);
-        mColorResourceId = colorResourceId;
-    }
-*/
     /**
      * @param context         - is the current context (activity)
      * @param objects         - is the list of word translations and appropriate image (if required)
@@ -49,10 +34,10 @@ public class WordAdapter extends ArrayAdapter<Word>
         mColorResourceId = colorResourceId;
     }
     /**
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * @param position     Position of view in list
+     * @param convertView  list item view
+     * @param parent       Parent view
+     * @return ListitemView set up for display
      */
     @NonNull
     @Override
@@ -99,13 +84,5 @@ public class WordAdapter extends ArrayAdapter<Word>
         return listItemView;
         //return super.getView(position, convertView, parent);
     }
-/*
-    protected void trace(String msg)
-    {
-        Log.v("WordAddapter", msg);
-        //        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-*/
-
 
 }

@@ -15,7 +15,6 @@
  */
 package com.example.android.miwok;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Override the onCreat method to define this app's activities
-     * @param savedInstanceState
+     * @param savedInstanceState The bundle
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
