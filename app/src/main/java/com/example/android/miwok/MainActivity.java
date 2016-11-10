@@ -65,10 +65,11 @@ public class MainActivity extends AppCompatActivity
 
 
         // OnClickListener For:
-        createOnClickListener(R.id.numbers, NumbersActivity.class);     //      Numbers
-        createOnClickListener(R.id.family,  FamilyActivity.class);      //      Family Members
-        createOnClickListener(R.id.colors,  ColorsActivity.class);      //      Colors
-        createOnClickListener(R.id.phrases, PhrasesActivity.class);     //      Phrases
+        createOnClickListener(R.id.activity_pager, PagerViewActivity.class);    //      This app using the activity pager
+        createOnClickListener(R.id.numbers       , NumbersActivity.class);      //      Numbers
+        createOnClickListener(R.id.family        , FamilyActivity.class);       //      Family Members
+        createOnClickListener(R.id.colors        , ColorsActivity.class);       //      Colors
+        createOnClickListener(R.id.phrases       , PhrasesActivity.class);      //      Phrases
     }
     void trace(String msg)
     {

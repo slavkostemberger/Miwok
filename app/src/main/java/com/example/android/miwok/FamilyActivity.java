@@ -2,30 +2,31 @@ package com.example.android.miwok;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-public class FamilyActivity extends AppCompatActivity
+import static com.example.android.miwok.R.id.family;
+
+public class FamilyActivity extends BaseActivity
 {
-    MiwokFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_category);
-        mFragment = new MiwokFragment();
-        addWords();
-        mFragment.setActivityColor(R.color.category_family);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, setup()).commit();
 
 
+    }
+
+    protected int getMyColor()
+    {
+        return R.color.category_family;
     }
 
     /**
      * Create the translation words for this class
      */
-    protected void addWords()
+    protected void addWords(MiwokFragment mFragment)
     {
         mFragment.addWord(new Word("father"         , "әpә"     , R.drawable.family_father         , R.raw.family_father));
         mFragment.addWord(new Word("mother"         , "әṭa"     , R.drawable.family_mother         , R.raw.family_mother));
@@ -37,6 +38,17 @@ public class FamilyActivity extends AppCompatActivity
         mFragment.addWord(new Word("younger sister" , "kolliti" , R.drawable.family_younger_sister , R.raw.family_younger_sister));
         mFragment.addWord(new Word("grandmother"    , "ama"     , R.drawable.family_grandmother    , R.raw.family_grandmother));
         mFragment.addWord(new Word("grandfather"    , "paapa"   , R.drawable.family_grandfather    , R.raw.family_grandfather));
+    }
+    void trace(String msg)
+    {
+        // Note to self: The getClass().getName() returns the class name
+        //               (sub-class in this case)
+        Log.v(this.getClass().getName(), msg);
+
+        // Note to self: Code to display a message on the screen
+        //               for a short time, should we decide that
+        //               it would be useful
+        // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

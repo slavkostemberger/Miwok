@@ -3,9 +3,8 @@ package com.example.android.miwok;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class PhrasesActivity extends AppCompatActivity
+public class PhrasesActivity extends BaseActivity
 {
-    MiwokFragment mFragment;
 
     /**
      *
@@ -16,19 +15,19 @@ public class PhrasesActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_category);
-        mFragment = new MiwokFragment();
-        addWords();
-        mFragment.setActivityColor(R.color.category_phrases);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, setup()).commit();
     }
+    protected int getMyColor()
+    {
+        return R.color.category_phrases;
+    }
+
 
     /**
      * Create the translation words for this class
      * Note that this is the only activity in this app that does not need a icon/image
      */
-    protected void addWords()
+    protected void addWords(MiwokFragment mFragment)
     {
         mFragment.addWord(new Word("Where are you going?", "minto wuksus"   , R.raw.phrase_where_are_you_going));
         mFragment.addWord(new Word("What is your name?"  , "tinnә oyaase'nә", R.raw.phrase_what_is_your_name));

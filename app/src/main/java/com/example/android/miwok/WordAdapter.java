@@ -47,24 +47,20 @@ trace("WordAddapter Initialization");
     {
         // Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
-trace("listitemView = " + listItemView);
         if (listItemView == null)
         {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_item, parent, false);
-trace("listitemView inflated = " + listItemView);
         }
 
         // Get the {@link AndroidFlavor} object located at this position in the list
         Word currentWord = getItem(position);
-trace("currentWord = " + currentWord.toString());
         // Find the TextView in the list_item.xml layout for each view to be displayed
 
         ImageView iconView        = (ImageView) listItemView.findViewById(R.id.image_view);
         View translationContainer = listItemView.findViewById(R.id.text_container);
         TextView miworkTextView   = (TextView) listItemView.findViewById(R.id.miword_text_view);
         TextView defaultTextView  = (TextView) listItemView.findViewById(R.id.default_text_view);
-trace("Got the views");
         //
         // Set the views to the image/words
         int color = ContextCompat.getColor(getContext(), mColorResourceId);     // Get the colour for the colour resource provided
@@ -72,7 +68,6 @@ trace("Got the views");
         // Set up the image for the
         if (currentWord.hasImage())
         {
-trace("currentWord has image");
             // We have an image - set the image resource and make sure that the the view is visible
             iconView.setImageResource(currentWord.getImageResourceId());
             iconView.setVisibility(View.VISIBLE);
@@ -81,15 +76,11 @@ trace("currentWord has image");
             // We don't have an image - hide the view so it takes up no space (INVISIBLE would
             // hide the view but still take up space
             iconView.setVisibility(View.GONE);
-trace("currentWord does NOT have an image");
         }
 
-trace("Setting Miwok word");
         miworkTextView.setText(currentWord.getMiwokTranslation());              // Display the Miwok word
-trace("Setting English word");
         defaultTextView.setText(currentWord.getDefaultTranslation());           // Display the translated word
         //Log.v("WordAddapter", "Word: " + currentWord.getDefaultTranslation());  // Log it (for now)
-trace("returning listItemView");
         return listItemView;
         //return super.getView(position, convertView, parent);
     }

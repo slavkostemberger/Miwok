@@ -4,9 +4,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class ColorsActivity extends AppCompatActivity
+public class ColorsActivity extends BaseActivity
 {
-    MiwokFragment mFragment;
 
 
     @Override
@@ -14,19 +13,18 @@ public class ColorsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_category);
-        mFragment = new MiwokFragment();
-        addWords();
-        mFragment.setActivityColor(R.color.category_colors);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, setup()).commit();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-
+    }
+    protected int getMyColor()
+    {
+        return R.color.category_colors;
     }
 
     /**
      * Create the translation words for this class
      */
-    protected void addWords()
+    protected void addWords(MiwokFragment mFragment)
     {
         mFragment.addWord(new Word("red"           , "weṭeṭṭi" , R.drawable.color_red           , R.raw.color_red));
         mFragment.addWord(new Word("green"         , "chokokki", R.drawable.color_green         , R.raw.color_green));

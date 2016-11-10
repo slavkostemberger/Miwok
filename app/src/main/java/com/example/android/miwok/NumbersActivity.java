@@ -2,10 +2,10 @@ package com.example.android.miwok;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-public class NumbersActivity extends AppCompatActivity
+public class NumbersActivity extends BaseActivity
 {
-    MiwokFragment mFragment;
     /**
      * Created by slavko on 04-Nov-2016 11:43:32AM.
      */
@@ -19,19 +19,18 @@ public class NumbersActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_category);
-        mFragment = new MiwokFragment();
-        addWords();
-        mFragment.setActivityColor(R.color.category_numbers);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, setup()).commit();
+    }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-
+    protected int getMyColor()
+    {
+        return R.color.category_numbers;
     }
 
     /**
      * Create the translation words for this class
      */
-    protected void addWords()
+    protected void addWords(MiwokFragment mFragment)
     {
         //trace("NumbersActivity.addWords");
 
@@ -47,4 +46,5 @@ public class NumbersActivity extends AppCompatActivity
         mFragment.addWord(new Word("ten"  , "na'aacha" , R.drawable.number_ten  , R.raw.number_ten));
 
     }
+
 }
