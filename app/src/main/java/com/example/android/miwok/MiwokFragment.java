@@ -1,22 +1,25 @@
 package com.example.android.miwok;
 
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MiwokBase extends AppCompatActivity
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class MiwokFragment extends Fragment
 {
-    /**
-     * All sub-classes must override the onCreate and addWords methods
-     */
 
     /**
      * Define class variables
@@ -38,7 +41,7 @@ public class MiwokBase extends AppCompatActivity
     /**
      * Media Player and Audio Manager object containers
      */
-    private MediaPlayer  mMediaPlayer;      // Media player player - So we can manage it properly
+    private MediaPlayer mMediaPlayer;      // Media player player - So we can manage it properly
     private AudioManager mAudioManager;     // Audio Focus handling
 
     /**
@@ -68,7 +71,12 @@ public class MiwokBase extends AppCompatActivity
                  * Base on above observation, I need to release the media player
                  * This behaviour needs to be verified
                  */
-                releaseMediaPlayer();
+                if (mMediaPlayer != null)
+                {
+                    mMediaPlayer.pause();
+                    mMediaPlayer.seekTo(0);
+                }
+                // releaseMediaPlayer();
 
                 // Pause playback and reset to start of audio file
                 // mMediaPlayer.pause();
@@ -104,7 +112,6 @@ public class MiwokBase extends AppCompatActivity
                 //D trace("AUDIOFOCUS_GAIN mCategoryColor = " + mCategoryColor);
                 if (mMediaPlayer != null)
                 {
-                    mMediaPlayer.seekTo(0);
                     mMediaPlayer.start();
                 } else
                 {
@@ -157,7 +164,7 @@ public class MiwokBase extends AppCompatActivity
      * ----------------------------------------------------------------------------
      */
     private final MediaPlayer.OnCompletionListener mMediaCompleted
-            = new MediaPlayer.OnCompletionListener()
+        = new MediaPlayer.OnCompletionListener()
     {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer)
@@ -194,8 +201,7 @@ public class MiwokBase extends AppCompatActivity
             {
                 traceE("MiwokBase.OnCreate.onItemClick requestAudioFocus result wa AUDIO_REQUEST_GRANTED ");
                 // We have audio focus - Start playback.
-                mMediaPlayer = MediaPlayer.create(MiwokBase.this,
-                        mWords.get(position).getSoundResource());
+                mMediaPlayer = MediaPlayer.create(getActivity(), mWords.get(position).getSoundResource());
                 traceE("OnClick mMediaPlayer = " + mMediaPlayer);
                 mMediaPlayer.start();
                 mMediaPlayer.setOnCompletionListener(mMediaCompleted);
@@ -204,53 +210,89 @@ public class MiwokBase extends AppCompatActivity
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public MiwokFragment()
     {
-        //D traceE("==> onCreate =================================================================");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+        // Required empty public constructor
+    }
+
+    /**
+     * Notes to self
+     * 1) onCreate is replace by onCreateView
+     * 2) Add line:
+     *    TextView textView = new TextView(getActivity());
+     * 3) Change
+     *    ListView listView = (ListView) findViewById(R.id.list);
+     *  to
+     *    ListView listView = (ListView) rootView.findViewById(R.id.list);
+     *  and
+     *    AudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+     *  to
+     *    mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+     *  and
+     *    WordAdapter adapter = new WordAdapter(this, mWords, mCategoryColor);
+     *  to
+     *    WordAdapter adapter = new WordAdapter(getActivity(), words, R.color.category_numbers);
+     *  and (above in the OnItemClickListener definition)
+     *    mMediaPlayer = MediaPlayer.create(MiwokBase.this, mWords.get(position).getSoundResource());
+     *  to
+     *    mMediaPlayer = MediaPlayer.create(getActicity(), mWords.get(position).getSoundResource());
+     */
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
         // Create and setup {@link AudioManager} to request audio manager
         //* trace("MiwokBase.OnCreate Getting AudioManager");
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-        //D trace("MiwokBase.OnCreate   mMediaPlayer = " + mMediaPlayer);
-        //D trace("MiwokBase.OnCreate  mAudioManager = " + mAudioManager);
-        //D trace("MiwokBase.OnCreate mCategoryColor = " + mCategoryColor);
-
-        addWords();                 // Set up the required word translations (redefined at the subclass level)
-
+// We are moving this to the activity vi the addWord method
+//        addWords();                 // Set up the required word translations (redefined at the subclass level)
         //D dumpWords();            // Dump word list to log
-
-        WordAdapter adapter = new WordAdapter(this, mWords, mCategoryColor);
-        ListView listView = (ListView) findViewById(R.id.list);
+        WordAdapter adapter = new WordAdapter(getActivity(), mWords, mCategoryColor);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
         listView.setAdapter(adapter);
-
-        // Set up the OnItemClick listener
         listView.setOnItemClickListener(mOnItemClickListener);
 
+
+ // -------------------------------------------------------------------------------------------------
+//        getActivity().setContentView(R.layout.word_list);
+
+        return rootView;
     }
 
     /**
-     * Save the background colour for the activity (set in a sub-class
-     * @param activityColor - Background colour
+     *
+     * @param wd word object
      */
-    void setActivityColor(int activityColor)
+    public void addWord(Word wd)
     {
-        mCategoryColor = activityColor;
+        mWords.add(wd);
     }
-
-    /**
-     * This methid set up the translation words
-     * It MUST be over-ridden in the sub-class
-     */
+/*
     void addWords()
     {
         // trace("MworkBase.addWords");
         mWords.add(new Word("red", "Bug in MiwokBase.addWord", R.drawable.color_red, R.raw.color_red));
     }
-
+*/
+    /**
+     * Save the background colour for the activity (set in a sub-class
+     * @param activityColor - Background colour
+     */
+    public void setActivityColor(int activityColor)
+    {
+        mCategoryColor = activityColor;
+    }
 
     /**
      * Debug helper - display a log message
@@ -304,18 +346,12 @@ public class MiwokBase extends AppCompatActivity
         //D else trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
     }
 
-    /**
-     * Override the onStop to clean up the media player resources
-     */
     @Override
-    protected void onStop()
+    public void onStop()
     {
-        //D traceE("<== MiwokBase.onStop =========================================================");
-        // Release the media player resources and then "stop"
-        releaseMediaPlayer();
         super.onStop();
+        releaseMediaPlayer();
     }
-
 
     /**
      * Debug helper to dump words in an array
@@ -328,5 +364,5 @@ public class MiwokBase extends AppCompatActivity
             trace("Word at IndexX " + i + ": " + mWords.get(i).toString());
         }
     }
-
 }
+

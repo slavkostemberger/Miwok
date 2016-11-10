@@ -18,6 +18,7 @@ package com.example.android.miwok;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -68,6 +69,17 @@ public class MainActivity extends AppCompatActivity
         createOnClickListener(R.id.family,  FamilyActivity.class);      //      Family Members
         createOnClickListener(R.id.colors,  ColorsActivity.class);      //      Colors
         createOnClickListener(R.id.phrases, PhrasesActivity.class);     //      Phrases
+    }
+    void trace(String msg)
+    {
+        // Note to self: The getClass().getName() returns the class name
+        //               (sub-class in this case)
+        Log.v(this.getClass().getName(), msg);
+
+        // Note to self: Code to display a message on the screen
+        //               for a short time, should we decide that
+        //               it would be useful
+        // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }
