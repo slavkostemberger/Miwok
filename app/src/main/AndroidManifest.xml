@@ -60,8 +60,6 @@
             android:parentActivityName=".MainActivity"
             >
         </activity>
-        <activity android:name=".MiwokBase">
-        </activity>
         <activity android:name=".PagerViewActivity">
         </activity>
         <activity android:name=".BaseActivity">

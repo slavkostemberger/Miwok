@@ -33,7 +33,6 @@ class WordAdapter extends ArrayAdapter<Word>
     {
         super(context, 0, objects);
         mColorResourceId = colorResourceId;
-trace("WordAddapter Initialization");
     }
     /**
      * @param position     Position of view in list
@@ -90,14 +89,8 @@ trace("WordAddapter Initialization");
      */
     void trace(String msg)
     {
-        // Note to self: The getClass().getName() returns the class name
-        //               (sub-class in this case)
         Log.v(this.getClass().getName(), msg);
 
-        // Note to self: Code to display a message on the screen
-        //               for a short time, should we decide that
-        //               it would be useful
-        // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

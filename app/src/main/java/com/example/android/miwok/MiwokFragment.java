@@ -29,7 +29,7 @@ public class MiwokFragment extends Fragment
      * Define the word array to hold the translation words and image
      * Note to self: This has to be final because it is used in an anonymous class
      */
-    final ArrayList<Word> mWords = new ArrayList<>();
+    private final ArrayList<Word> mWords = new ArrayList<>();
 
     /**
      * This contains the background color of the translation word area
@@ -298,7 +298,7 @@ public class MiwokFragment extends Fragment
      * Debug helper - display a log message
      * @param msg - message to display
      */
-    void trace(String msg)
+    private void trace(String msg)
     {
         // Note to self: The getClass().getName() returns the class name
         //               (sub-class in this case)

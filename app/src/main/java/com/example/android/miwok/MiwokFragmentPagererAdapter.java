@@ -63,7 +63,7 @@ public class MiwokFragmentPagererAdapter extends FragmentPagerAdapter
         }
     }
 
-    void trace(String msg)
+    private void trace(String msg)
     {
         Log.e(this.getClass().getName(), msg);
 

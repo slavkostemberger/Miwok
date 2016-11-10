@@ -1,10 +1,6 @@
 package com.example.android.miwok;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import static com.example.android.miwok.R.id.family;
 
 public class FamilyActivity extends BaseActivity
 {
@@ -38,17 +34,6 @@ public class FamilyActivity extends BaseActivity
         mFragment.addWord(new Word("younger sister" , "kolliti" , R.drawable.family_younger_sister , R.raw.family_younger_sister));
         mFragment.addWord(new Word("grandmother"    , "ama"     , R.drawable.family_grandmother    , R.raw.family_grandmother));
         mFragment.addWord(new Word("grandfather"    , "paapa"   , R.drawable.family_grandfather    , R.raw.family_grandfather));
-    }
-    void trace(String msg)
-    {
-        // Note to self: The getClass().getName() returns the class name
-        //               (sub-class in this case)
-        Log.v(this.getClass().getName(), msg);
-
-        // Note to self: Code to display a message on the screen
-        //               for a short time, should we decide that
-        //               it would be useful
-        // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }
