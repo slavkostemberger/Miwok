@@ -14,6 +14,7 @@
 -->
 <resources>
     <!-- Title for the application. [CHAR LIMIT=12] -->
+    <string name="activity_pager">Use Pager</string>
     <string name="app_name">Miwok</string>
 
     <!-- Category name for phrases [CHAR LIMIT=20] -->
@@ -30,6 +31,4 @@
     <string name="word_image">Image of word being displyed</string>
     <string name="play_button">Play sound</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
