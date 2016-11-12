@@ -87,7 +87,7 @@ public class MiwokFragment extends Fragment
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
             {
                 //D trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
-                // In this case, we wnat ot handel it the same was as for\
+                // In this case, we want to handel it the same was as for AUDIOFOCUS_LOSS_TRANSIENT
                 if (mMediaPlayer != null)
                 {
                     mMediaPlayer.pause();
@@ -98,7 +98,7 @@ public class MiwokFragment extends Fragment
                 }
             } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
             {
-                        /*D trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN"); /* */
+                //D trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN"); /* */
                 /**
                  * It appears that when I get this callback. I've lost the
                  * media player. The following exception is raised
@@ -119,7 +119,7 @@ public class MiwokFragment extends Fragment
                 }
             } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
             {
-                        /*D trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN_TRANSIENT"); /* */
+                //D trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_GAIN_TRANSIENT"); /* */
                 // Resume playback
                 if (mMediaPlayer != null)
                 {
@@ -139,7 +139,7 @@ public class MiwokFragment extends Fragment
                     mMediaPlayer.seekTo(0);
                 } else
                 {
-                    trace("Medial Player Not Configured (mMediaPlayer is null)");
+                    traceE("Medial Player Not Configured (mMediaPlayer is null)");
                 }
 
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
@@ -147,12 +147,12 @@ public class MiwokFragment extends Fragment
                 /**
                  * I am NOT getting this when the audio is completed!!!
                  */
-                trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS");
+                //D trace("MiwokBase.OnCreate.OnAudioFocusChangeListener focustChange = AUDIOFOCUS_LOSS");
                 // Stop playback if playing and clean-up media player stuff
                 releaseMediaPlayer();
             } else
             {
-                trace("MiwokBase.OnCreate.OnAudioFocusChangeListener Audio Change listener returned unhandeled code " + focusChange);
+                traceE("MiwokBase.OnCreate.OnAudioFocusChangeListener Audio Change listener returned unhandeled code " + focusChange);
             }
         }
     };
@@ -169,8 +169,7 @@ public class MiwokFragment extends Fragment
         @Override
         public void onCompletion(MediaPlayer mediaPlayer)
         {
-            trace("MiwokBase.OnCreate.onCompletion");
-            // trace("Media player complete - releasing ...");
+            //D trace("MiwokBase.OnCreate.onCompletion");
             releaseMediaPlayer();
         }
     };
@@ -185,8 +184,8 @@ public class MiwokFragment extends Fragment
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            trace("MiwokBase.OnCreate.onItemClick ");
-            releaseMediaPlayer(); // Just in case it has not been release yet
+            //D trace("MiwokBase.OnCreate.onItemClick ");
+            //releaseMediaPlayer(); // Just in case it has not been release yet
 
             //
             // Ask for audio focus
@@ -194,15 +193,18 @@ public class MiwokFragment extends Fragment
                     // Use the music stream.
                     AudioManager.STREAM_MUSIC,
                     // Request permanent focus.
-                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                    AudioManager.AUDIOFOCUS_GAIN);
 
-            trace("MiwokBase.OnCreate.onItemClick requestAudioFocus result = " + result);
+            //D trace("MiwokBase.OnCreate.onItemClick requestAudioFocus result = " + result);
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
             {
-                traceE("MiwokBase.OnCreate.onItemClick requestAudioFocus result wa AUDIO_REQUEST_GRANTED ");
-                // We have audio focus - Start playback.
+                //D traceE("MiwokBase.OnCreate.onItemClick requestAudioFocus result wa AUDIO_REQUEST_GRANTED ");
+                // We have audio focus
+                // If mMediaPlayer is not null then we have interrupted our own playback
+                // In this case we will NEVER want to re-start, so we can just release the resource
+                releaseMediaPlayer();
+                // No we can start again on a new file
                 mMediaPlayer = MediaPlayer.create(getActivity(), mWords.get(position).getSoundResource());
-                traceE("OnClick mMediaPlayer = " + mMediaPlayer);
                 mMediaPlayer.start();
                 mMediaPlayer.setOnCompletionListener(mMediaCompleted);
             }
@@ -252,11 +254,8 @@ public class MiwokFragment extends Fragment
         View rootView = inflater.inflate(R.layout.word_list, container, false);
 
         // Create and setup {@link AudioManager} to request audio manager
-        //* trace("MiwokBase.OnCreate Getting AudioManager");
         mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-// We are moving this to the activity vi the addWord method
-//        addWords();                 // Set up the required word translations (redefined at the subclass level)
         //D dumpWords();            // Dump word list to log
         WordAdapter adapter = new WordAdapter(getActivity(), mWords, mCategoryColor);
         ListView listView = (ListView) rootView.findViewById(R.id.list);
@@ -281,7 +280,7 @@ public class MiwokFragment extends Fragment
 /*
     void addWords()
     {
-        // trace("MworkBase.addWords");
+        //D trace("MworkBase.addWords");
         mWords.add(new Word("red", "Bug in MiwokBase.addWord", R.drawable.color_red, R.raw.color_red));
     }
 */
@@ -326,8 +325,10 @@ public class MiwokFragment extends Fragment
     private void releaseMediaPlayer()
     {
         // If the media player is not null, then it may be currently playing a sound.
+        //D traceE("--> releaseMediaPlayer");
         if (mMediaPlayer != null)
         {
+            //D traceE("--: mMediaPlayer = " + mMediaPlayer + " <---------------------------");
 
             // Abandon the audio focus when playback is completed (or interrupted)
             mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
@@ -344,6 +345,7 @@ public class MiwokFragment extends Fragment
 
         }
         //D else trace("MiwokBase.releaseMediaPlayer mMediaPlayer != null");
+        //D traceE("<-- releaseMediaPlayer");
     }
 
     @Override
@@ -360,7 +362,6 @@ public class MiwokFragment extends Fragment
     {
         for(int i = 0; i < mWords.size(); ++i)
         {
-            //trace("Word at IndexX " + i + ": " + mWords.get(i).getDefaultTranslation());
             trace("Word at IndexX " + i + ": " + mWords.get(i).toString());
         }
     }

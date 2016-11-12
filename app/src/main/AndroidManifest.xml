@@ -64,6 +64,8 @@
         </activity>
         <activity android:name=".BaseActivity">
         </activity>
+        <activity android:name=".TabPagerActivity">
+        </activity>
     </application>
 
 </manifest>

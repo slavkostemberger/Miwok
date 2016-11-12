@@ -26,7 +26,6 @@ public class MiwokFragmentPagererAdapter extends FragmentPagerAdapter
     @Override
     public Fragment getItem(int position)
     {
-        trace("MiwokFragmentPagererAdapter.getItem.position = " + position);
         switch(position)
         {
             case 0: return new NumbersActivity().setup();
@@ -52,14 +51,14 @@ public class MiwokFragmentPagererAdapter extends FragmentPagerAdapter
         switch(position)
         {
             case 0:
-                return Resources.getSystem().getString(R.string.category_numbers);
+                return "Numbers";
             case 1:
-                return Resources.getSystem().getString(R.string.category_family);
+                return "Family";
             case 2:
-                return Resources.getSystem().getString(R.string.category_colors);
+                return "Colors";
             case 3:
-                return Resources.getSystem().getString(R.string.category_phrases);
-            default: return "Undefined page";
+                return "Phrases";
+            default:  return "Undefined page";
         }
     }
 

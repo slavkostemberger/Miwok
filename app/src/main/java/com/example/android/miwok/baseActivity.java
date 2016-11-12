@@ -20,25 +20,19 @@ public class BaseActivity extends AppCompatActivity
 
     public MiwokFragment setup()
     {
-        trace("--> setup");
         MiwokFragment mFragment;
 
-        trace("--: setContentView");
         if(inOnCreate)
         {
             setContentView(R.layout.activity_category);
         }
-        trace("--: MiwokFragment");
         mFragment = new MiwokFragment();
-        trace("--: mFragment");
         addWords(mFragment);
-        trace("--: setActivityColor");
         mFragment.setActivityColor(getMyColor());
-        trace("<-- setup");
         return mFragment;
     }
 
-    protected int getMyColor()
+    int getMyColor()
     {
         return R.color.color_white;
     }
@@ -50,7 +44,7 @@ public class BaseActivity extends AppCompatActivity
         mFragment.addWord(new Word("Undefined Activity"  , "Undefined Activity"     , R.drawable.number_one  , R.raw.number_one));
     }
 
-    void trace(String msg)
+    private void trace(String msg)
     {
         // Note to self: The getClass().getName() returns the class name
         //               (sub-class in this case)
